@@ -1,7 +1,11 @@
 'use client'
 import { useState } from "react";
+import { getCities, getDepartments } from "./actions/getCities";
 
 export default function Home() {
+
+  // getDepartments();
+  // getCities(8)
 
   const [parameters, setParameters] = useState({
     firstName: "",
@@ -14,14 +18,6 @@ export default function Home() {
     habeasData: false,
   });
 
-  // const [results, setResults] = useState({
-  //   months: 0,
-  //   moNominal: 0,
-  //   moInterestOnly: 0,
-  //   toDisplay: "",
-  //   totalPayment: "",
-  //   solved: false,
-  // });
 
   const [error, setError] = useState({
     firstName: false,
@@ -65,15 +61,7 @@ export default function Home() {
   };
   
   const resetAll = () => {
-    // setResults({
-    //   months: 0,
-    //   moNominal: 0,
-    //   moInterestOnly: 0,
-    //   toDisplay: "",
-    //   totalPayment: "",
-    //   solved: false,
-    // });
-
+    
     setParameters({
       firstName: "",
       lastName: "",
