@@ -6,7 +6,7 @@ export default function SuccessResult ({ code }: { code: String}){
           <div>
             <h2 className="text-white text-xl font-bold mb-4"> Su código </h2>
             <p className="text-gray-400 text-xs mb-8">
-              <strong><h3>¡Felicitaciones!</h3></strong>
+              <strong>¡Felicitaciones!</strong>
               Se ha registrado exitosamente en el sorteo. Por favor guarde 
               su código para participar.
             </p>

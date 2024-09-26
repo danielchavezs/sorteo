@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Department } from "../types";
 
 export async function getDepartments () {
     
