@@ -1,11 +1,19 @@
 'use client'
 import { useState } from "react";
 import { getCities, getDepartments } from "./actions/getCities";
+import SuccessResult from "./ui/SuccessResult";
+import EmptyResult from "./ui/EmptyResult";
+import { generateCode } from "./actions/generateCode";
 
 export default function Home() {
 
   // getDepartments();
   // getCities(8)
+
+  const [results, setResults] = useState({
+    solved: false, 
+    code: ""
+  });
 
   const [parameters, setParameters] = useState({
     firstName: "",
@@ -48,6 +56,13 @@ export default function Home() {
   //   setParameters({ ...parameters, [property]: formattedValue });
   // };
   
+  const resetResults = () => {
+    setResults({
+      solved: false,
+      code: "",
+    })
+  };
+
   const resetErrors = () => {
     setError({
       firstName: false,
@@ -74,53 +89,55 @@ export default function Home() {
       email: "",
       habeasData: false,
     });
-    
+
+    resetResults();
     resetErrors();
   };
   
-  // const validateForm = async () => {
-  //   resetErrors();
-  //   const requiredFields: (keyof Parameters)[] = ["amount", "term", "rate", "mortageType"];
-  //   let fieldsCompleted = true;
+  const validateForm = async () => {
+    resetErrors();
+    // const requiredFields: (keyof Parameters)[] = ["amount", "term", "rate", "mortageType"];
+    // let fieldsCompleted = true;
     
-  //   const newErrors = { amount: false, term: false, rate: false, mortageType: false, count: 0 };
-  //   for (const key of requiredFields) {
-  //     if (parameters[key] === "") {
-  //       newErrors[key] = true;
-  //       fieldsCompleted = false;
-  //       newErrors.count++
-  //     };
-  //   };
-  //   setError(newErrors)
-  //   return fieldsCompleted;
-  // };
+    // const newErrors = { amount: false, term: false, rate: false, mortageType: false, count: 0 };
+    // for (const key of requiredFields) {
+    //   if (parameters[key] === "") {
+    //     newErrors[key] = true;
+    //     fieldsCompleted = false;
+    //     newErrors.count++
+    //   };
+    // };
+    // setError(newErrors)
+    // return fieldsCompleted;
+    return true;
+  };
   
-  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   // const isValid = await validateForm();
-  //   const isValid = true; //HARDCODEADO TEMPORALMENTE PARA MONTAR IMAGEN INICIAL DE APP
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const isValid = await validateForm();
+    // const isValid = true; //HARDCODEADO TEMPORALMENTE PARA MONTAR IMAGEN INICIAL DE APP
 
-  //   console.log(isValid)
+    // console.log(isValid)
     
-  //   if (!isValid) {
-  //     console.log("ERRORS REGISTERED:", error);
-  //     alert("Please complete all fields before submiting.");
-  //     return;
-  //   };
-  //   try {
-  //     const amount = deformatAmount(parameters.amount);
-  //     const term = Number(parameters.term);
-  //     const rate = Number(parameters.rate);
-  //     const mortageType = parameters.mortageType;
+    if (!isValid) {
+      console.log("ERRORS REGISTERED:", error);
+      alert("Por favor complete todos los campos con datos válidos antes de hacer click.");
+      return;
+    };
+    try {
+      resetResults();
+      const res = generateCode();
+      setResults({
+        solved: true,
+        code: res
+      });
+      // console.log(code)
+    } catch (err) {
+      window.alert(error);
+    }
+  };
 
-  //     const res = await calculateMortage(amount, term, rate, mortageType);
-  //     setResults(res);
-  //   } catch (err) {
-  //     window.alert(error);
-  //   }
-  // };
-
-  console.log(parameters)
+  // console.log(parameters)
 
   return (
     <main className="bg-sky-100 flex min-h-screen flex-col items-center justify-between lg:p-32 md:p-12">
@@ -130,7 +147,7 @@ export default function Home() {
       <div className="bg-white w-full lg:w-96 md:w-full sm:w-screen flex p-6 rounded-l-2xl md:rounded-t-2xl">
         <div className="w-full">
 
-            <form onSubmit={resetAll}>
+            <form onSubmit={handleSubmit}>
               <div className="flex justify-between mb-8">
                 <h2 className="text-lg font-extrabold text-slate-900"> Ingresa tus datos </h2>
                 <button
@@ -305,13 +322,15 @@ export default function Home() {
         </div>
       </div>
 
-      {/* <div>
+
+
+      <div>
         {results.solved ? (
-        <SuccessResult results={results} />
+        <SuccessResult code={results.code} />
         ) : (
           <EmptyResult />
         )}
-      </div> */}
+      </div>
 
       </div>
 
