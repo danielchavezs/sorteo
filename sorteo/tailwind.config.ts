@@ -8,9 +8,17 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        'sm': '320px',
+        'md': '480px',
+        'lg': '900px',
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+      },
+      fontFamily: {
+        sans: ['Plus Jakarta Sans', 'sans-serif']
       },
     },
   },

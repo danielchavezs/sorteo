@@ -31,12 +31,14 @@ export default function Home() {
     count: 0,
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const property = event.target.name;
     let value = event.target.value;
 
-    value = value.replace(/,/g, ''); // Remueve las comas para mantener la consistencia.
-    setParameters({ ...parameters, [property]: (value) });
+    setParameters(prevParameters => ({
+      ...prevParameters,
+      [property]: value,
+    }));
   };
 
   // const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -118,6 +120,7 @@ export default function Home() {
   //   }
   // };
 
+  console.log(parameters)
 
   return (
     <main className="bg-sky-100 flex min-h-screen flex-col items-center justify-between lg:p-32 md:p-12">
@@ -200,8 +203,9 @@ export default function Home() {
                       id="department"
                       name="department"
                       value={parameters.department}
-                      // onChange={handleChange}
+                      onChange={handleChange}
                     >
+                      <option value="">Seleccione un departamento</option>
                       <option>Cundinamarca</option>
                       <option>Antioquia</option>
                     </select>
@@ -212,6 +216,7 @@ export default function Home() {
 
 
 
+
                   <div className="flex flex-col">
                     <label className="font-semibold text-black">Ciudad</label>
                     <select
@@ -219,8 +224,9 @@ export default function Home() {
                       id="city"
                       name="city"
                       value={parameters.city}
-                      // onChange={handleChange}
+                      onChange={handleChange}
                     >
+                      <option value="">Seleccione una ciudad</option>
                       <option>Bogotá D.C.</option>
                       <option>Medellín</option>
                     </select>
@@ -261,6 +267,24 @@ export default function Home() {
                     </span>
                   </div>
 
+                  <div className="flex flex-row">
+                    <input
+                      className="px-2 pb-1 mt-1 rounded-md border border-slate-400"
+                      id="habeasData"
+                      type="checkbox"
+                      name="habeasData"
+                      checked={parameters.habeasData} // Aquí usamos 'checked' en lugar de 'value'
+                      onChange={(e) => setParameters({ ...parameters, habeasData: e.target.checked })} // Asegúrate de acceder a e.target.checked
+                    />
+                    <p className="ml-4 mt-4 w-full text-xs">
+                      Autorizo el tratamiento de mis datos de acuerdo con la finalidad establecida en la política de protección de datos personales
+                    </p>
+                    <span className={error.habeasData ? "text-xs text-red-700" : "hidden"}>
+                      Debe aceptar los términos para poder enviar el formulario.
+                    </span>
+                  </div>
+
+
 
               </div>
 
@@ -270,10 +294,10 @@ export default function Home() {
               <div className="">
                 <button
                   type="submit"
-                  className="lg:w-60 md:w-64 mt-8 flex font-bold text-sm bg-lime py-2 pl-12 pr-6 sm:place-content-center sm:px-0 rounded-3xl hover:bg-ligthlime sm:w-full"
+                  className="bg-slate-300 lg:w-60 md:w-64 mt-8 flex font-bold text-sm bg-lime py-2 pl-12 pr-6 sm:place-content-center sm:px-0 rounded-3xl hover:bg-ligthlime sm:w-full"
                 >
                   {" "}
-                  Calculate Repayments{" "}
+                  Recibir Código{" "}
                 </button>
               </div>
             </form>
