@@ -5,7 +5,6 @@ import SuccessResult from "./ui/SuccessResult";
 import EmptyResult from "./ui/EmptyResult";
 import { generateCode } from "./actions/generateCode";
 import { Parameters } from "./types";
-import { count } from "console";
 
 export default function Home() {
 
@@ -197,21 +196,17 @@ export default function Home() {
         ...prevError,
         habeasData: "",
       }));
-      return true;
+      // return true;
     } else if(parameters.habeasData === false){
       setError((prevError) => ({
         ...prevError,
         habeasData: "Se debe aceptar el tratamiento de datos para poder registrarse en el sorteo.",
-      }));
+      }));;
     }
-    return false;
+    // return false;
   };
   
-
   const validateForm = () => {
-    // resetErrors();
-    validateHabeasData();
-
     // Validación de presencia de errores en el estado local
     for (const value of Object.values(error)) {
       if (typeof value === "string" && value.length > 1){
@@ -220,29 +215,56 @@ export default function Home() {
     };
     return true;
   };
+
+  const executeValidations = (): Promise<boolean> => {
+    return new Promise((resolve) => {
+      resetErrors(); // Limpiar errores antes de ejecutar validaciones.
+  
+      validateString(parameters.firstName, "nombre");
+      validateString(parameters.lastName, "apellido");
+      validateString(parameters.department, "departamento");
+      validateString(parameters.city, "municipio");
+      validateNumber(parameters.nationalID, "documento");
+      validateNumber(parameters.phone, "telefono");
+      validateEmail(parameters.email);
+      validateHabeasData();
+
+      console.log("Validaciones finalizadas dentro de la función");
+
+      // Verificamos si hay errores después de las validaciones
+      const formIsValid = validateForm();
+      resolve(formIsValid); // Pasamos el resultado de la validación
+    });
+  };
+
   
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("ejecutando submit")
     e.preventDefault();
-    // const isValid = validateForm();
-    // console.log("VALIDACIÓN DEL FORMULARIO COMPLETO", isValid)
-    
-    // if (!isValid) {
-    //   console.log("ERRORS REGISTERED:", error);
-    //   alert("Por favor verifique y complete la totalidad de los campos para poder registrarse.");
-    //   return;
-    // };
-    //  ACÁ SE PODRÍA HACER UNA VALIDACIÓN ADICIONAL SOBRE USUARIOS YA REGISTRADOS
-    try {
-      resetResults();
-      const res = generateCode();
-      setResults({
-        solved: true,
-        code: res
-      });
-      // console.log(code)
-    } catch (err) {
-      window.alert(error);
-    };
+
+    const isValid = await executeValidations()
+    console.log("Validaciones finalizadas después de ejecutadas en su await dentro del submit")
+    console.log("RESULTADO FINAL DE LAS VALIDACIONES CON validateForm():", isValid)
+
+
+      // Ahora verifica si hay errores en el estado
+      if (!isValid) {
+        console.log("ERRORS REGISTERED:", error);
+        alert("Por favor verifique y complete la totalidad de los campos para poder registrarse.");
+        return;
+      };
+      
+      // Si no hay errores, sigue con el flujo de generación de código
+      try {
+        resetResults();
+        const res = generateCode();
+        setResults({
+          solved: true,
+          code: res,
+        });
+      } catch (err) {
+        window.alert(error);
+      };
   };
 
   // console.log(parameters)
@@ -273,6 +295,7 @@ export default function Home() {
                   <div className="flex flex-col text-black">
                     <label className="font-semibold">Nombre</label>
                     <input
+                      required
                       className="px-2 pb-1 mt-1 min-w-36 w-full rounded-md border border-slate-400"
                       id="firstName"
                       type="text"
@@ -291,6 +314,7 @@ export default function Home() {
                   <div className="flex flex-col">
                     <label className="font-semibold text-black">Apellido</label>
                     <input
+                      required
                       className="px-2 pb-1 mt-1 min-w-36 w-full rounded-md border border-slate-400"
                       id="lastName"
                       type="text"
@@ -310,6 +334,7 @@ export default function Home() {
                   <div className="flex flex-col">
                     <label className="font-semibold text-black">Cédula de ciudadanía</label>
                     <input
+                      required
                       className="px-2 pb-1 mt-1 min-w-36 w-full rounded-md border border-slate-400"
                       id="nationalID"
                       type="text"
@@ -330,6 +355,7 @@ export default function Home() {
                   <div className="flex flex-col">
                     <label className="font-semibold text-black">Departamento</label>
                     <select
+                      required
                       className="px-2 pb-1 mt-1 min-w-36 w-full rounded-md border border-slate-400"
                       id="department"
                       name="department"
@@ -354,6 +380,7 @@ export default function Home() {
                   <div className="flex flex-col">
                     <label className="font-semibold text-black">Ciudad</label>
                     <select
+                      required
                       className="px-2 pb-1 mt-1 min-w-36 w-full rounded-md border border-slate-400"
                       id="city"
                       name="city"
@@ -376,6 +403,7 @@ export default function Home() {
                   <div className="flex flex-col">
                     <label className="font-semibold text-black">Teléfono</label>
                     <input
+                      required
                       className="px-2 pb-1 mt-1 min-w-36 w-full rounded-md border border-slate-400"
                       id="phone"
                       type="text"
@@ -395,6 +423,7 @@ export default function Home() {
                   <div className="flex flex-col">
                     <label className="font-semibold text-black">e-mail</label>
                     <input
+                      required
                       className="px-2 pb-1 mt-1 min-w-36 w-full rounded-md border border-slate-400"
                       id="email"
                       type="email"
@@ -412,6 +441,7 @@ export default function Home() {
 
                   <div className="flex flex-row">
                     <input
+                      required
                       className="px-2 pb-1 mt-1 rounded-md border border-slate-400"
                       id="habeasData"
                       type="checkbox"
