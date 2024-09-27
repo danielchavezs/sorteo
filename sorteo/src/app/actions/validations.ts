@@ -1,6 +1,6 @@
-import { Parameters } from "../types";
+import { Errors, Fields } from "../types";
 
-export const validateString = (value: string, field: keyof Parameters) => {
+export const validateString = (value: string, field: keyof Fields) => {
     const regex =
       field === 'city'
         ? /^[a-zA-ZÀ-ÿ\s.]+$/ // Acepta letras, tildes, espacios y puntos (.)
@@ -29,7 +29,7 @@ export const validateString = (value: string, field: keyof Parameters) => {
 
 export const validateNumber = (
     value: string | number,
-    field: keyof Parameters
+    field: keyof Fields
     ) => {
     
     const regex = /^\d+$/; // Acepta solo números
@@ -44,7 +44,7 @@ export const validateNumber = (
     // const errorHandling = fieldMap[field];
 
     if (typeof value === 'string' && value.trim() === '') {
-      errorMessage = `Debes ingresar un ${field} válido.`;
+      errorMessage = `Debes ingresar un número válido.`;
     } else if (!regex.test(String(value))) {
       errorMessage = `Este campo solo puede contener números.`;
     } else if (field === 'phone' && String(value).length !== 10) {
@@ -78,6 +78,16 @@ export const validateBoolean = (boolean: boolean) => {
         errorMessage = '';
     };
     return errorMessage;
+};
+
+export const validateForm = (err: Errors) => {
+    // Validación de presencia de errores en el estado local
+    for (const value of Object.values(err)) {
+      if (typeof value === "string" && value.length > 1){
+        return false;
+      };
+    };
+    return true;
 };
 
 

@@ -3,11 +3,12 @@ export interface Results {
     code: string,
 };
 
-export interface Parameters {
+export interface Fields {
     firstName: string,
     lastName: string,
     nationalID: number | string,
     department: string,
+    departmentID: number,
     city: string,
     phone: number | string,
     email: string,
@@ -28,4 +29,14 @@ export interface Errors {
 export interface Department {
     id: number;
     name: string;
+};
+
+export type DepartmentsList = Department[];
+
+export type City = string;
+export type CitiesList = string[];
+
+export interface List {
+    departmentsList: DepartmentsList,
+    citiesList: CitiesList,
 };

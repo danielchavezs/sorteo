@@ -1,11 +1,11 @@
 'use client';
 import SuccessResult from './ui/SuccessResult';
 import EmptyResult from './ui/EmptyResult';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getCities, getDepartments } from './actions/getCities';
 import { generateCode } from './actions/generateCode';
-import { Errors, Parameters, Results } from './types';
-import { validateBoolean, validateEmail, validateNumber, validateString } from './actions/validations';
+import { Errors, Fields, List, Results } from './types';
+import { validateBoolean, validateEmail, validateForm, validateNumber, validateString } from './actions/validations';
 
 export default function Home() {
 
@@ -16,11 +16,12 @@ export default function Home() {
     code: '',
   });
 
-  const [parameters, setParameters] = useState<Parameters>({
+  const [fields, setFields] = useState<Fields>({
     firstName: '',
     lastName: '',
     nationalID: '',
     department: '',
+    departmentID: 0,
     city: '',
     phone: '',
     email: '',
@@ -59,11 +60,12 @@ export default function Home() {
   };
 
   const resetFields = () => {
-    setParameters({
+    setFields({
       firstName: '',
       lastName: '',
       nationalID: '',
       department: '',
+      departmentID: 0,
       city: '',
       phone: '',
       email: '',
@@ -77,6 +79,52 @@ export default function Home() {
     resetResults();
     resetErrors();
   };
+  const [loadingDepartments, setLoadingDepartments] = useState(true);
+  const [loadingCites, setLoadingCities] = useState(true);
+
+  const [listsData, setListsData] = useState<List>({
+    departmentsList: [],
+    citiesList: [],
+  });
+
+  const fetchDepartments = async () => {
+    try {
+      const data = await getDepartments();
+      setListsData((prevData) => ({
+        ...prevData,
+        departmentsList: data,
+      }));
+      setLoadingDepartments(false);
+    } catch (error) {
+      console.error(error)
+    };
+  };
+
+  const fetchCities = async (id: number) => {
+    console.log("ejecutando fetch de ciudades");
+
+    try {
+      const data = await getCities(id);
+      const cities = data as string[];  // Ajuste adicional necesario por tipo recibido desde la llamada a la API.
+
+      setListsData({...listsData, citiesList: cities});
+      setLoadingCities(false);
+    } catch (error) {
+      console.error(error)
+    };
+  };
+
+  useEffect(() => {
+    fetchDepartments();
+  }, []); // Ejecutamos una única vez al cargar la página inicialmente.
+  
+
+  useEffect(() => {
+    if (fields.departmentID > 0) {
+      fetchCities(fields.departmentID);
+    }
+  }, [fields.departmentID]); // Se ejecuta cada vez que cambie el ID del departamento
+
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -85,7 +133,7 @@ export default function Home() {
     let value = event.target.value;
 
     // Actualizamos el estado sin convertir inmediatamente a número
-    setParameters((prevParameters) => ({
+    setFields((prevParameters) => ({
       ...prevParameters,
       [property]: value,
     }));
@@ -100,14 +148,14 @@ export default function Home() {
   const executeValidations = () => {
     // Verificamos si hay errores después de las validaciones y se registran en un objeto.
     return {
-      firstName: validateString(parameters.firstName, 'firstName'),
-      lastName: validateString(parameters.lastName, 'lastName'),
-      department: validateString(parameters.department, 'department'),
-      city: validateString(parameters.city, 'city'),
-      nationalID: validateNumber(parameters.nationalID, 'nationalID'),
-      phone: validateNumber(parameters.phone, 'phone'),
-      email: validateEmail(parameters.email),
-      habeasData: validateBoolean(parameters.habeasData)
+      firstName: validateString(fields.firstName, 'firstName'),
+      lastName: validateString(fields.lastName, 'lastName'),
+      department: validateString(fields.department, 'department'),
+      city: validateString(fields.city, 'city'),
+      nationalID: validateNumber(fields.nationalID, 'nationalID'),
+      phone: validateNumber(fields.phone, 'phone'),
+      email: validateEmail(fields.email),
+      habeasData: validateBoolean(fields.habeasData)
     };
   };
 
@@ -120,7 +168,7 @@ export default function Home() {
 
   const errorOnChange = (
       event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
-      key: keyof Parameters
+      key: keyof Fields
     ) => {
 
     let error: string = "";
@@ -146,24 +194,12 @@ export default function Home() {
     }));
   };
 
-
-  const validateForm = () => {
-    // Validación de presencia de errores en el estado local
-    for (const value of Object.values(error)) {
-      if (typeof value === "string" && value.length > 1){
-        return false;
-      };
-    };
-    return true;
-  };
-
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log('ejecutando submit');
+
     e.preventDefault();
 
     updateErrors();
-    const isValidForm = validateForm();
+    const isValidForm = validateForm(error);
 
     if (!formInteraction || !isValidForm) {
       console.log('ERRORS REGISTERED:', error);
@@ -173,7 +209,7 @@ export default function Home() {
       return;
     }
 
-    // Si no hay errores, sigue con el flujo de generación de código
+    // Si no hay errores, sigue con el flujo de generación del código.
     try {
       resetResults();
       const res = generateCode();
@@ -187,8 +223,10 @@ export default function Home() {
     }
   };
 
-  // console.log(parameters)
+  // console.log(fields)
   // console.error(error)
+  // console.log("DATA FETCHED FRFOM SERVER:", listsData);
+  // console.log("DEPARTAMENTO SELECCIONADO:", )
 
   return (
     <main className="bg-sky-100 flex min-h-screen flex-col items-center justify-between lg:p-32 md:p-12">
@@ -220,7 +258,7 @@ export default function Home() {
                     id="firstName"
                     type="text"
                     name="firstName"
-                    value={parameters.firstName}
+                    value={fields.firstName}
                     onChange={(event) => {
                       errorOnChange(event, "firstName");
                       handleChange(event);
@@ -243,7 +281,7 @@ export default function Home() {
                     id="lastName"
                     type="text"
                     name="lastName"
-                    value={parameters.lastName}
+                    value={fields.lastName}
                     onChange={(event) => {
                       errorOnChange(event, "lastName");
                       handleChange(event);
@@ -269,7 +307,7 @@ export default function Home() {
                     id="nationalID"
                     type="text"
                     name="nationalID"
-                    value={parameters.nationalID}
+                    value={fields.nationalID}
                     onChange={(event) => {
                       errorOnChange(event, "nationalID");
                       handleChange(event);
@@ -290,21 +328,34 @@ export default function Home() {
                     Departamento
                   </label>
                   <select
-                    // required
                     className="px-2 pb-1 mt-1 min-w-36 w-full rounded-md border border-slate-400"
                     id="department"
                     name="department"
-                    value={parameters.department}
+                    value={fields.department}
                     onChange={(event) => {
-                      errorOnChange(event, "department")
+                      errorOnChange(event, "department");
                       handleChange(event);
                       setFormInteraction(true);
+                      const selectedDep = listsData.departmentsList.find(dep => dep.name === event.target.value);
+                      setFields((prevFields) => ({
+                        ...prevFields,
+                        department: event.target.value,
+                        departmentID: selectedDep ? selectedDep.id : 0, // Guardamos el ID del departamento
+                      }));
                     }}
                   >
                     <option value="">Seleccione un departamento</option>
-                    <option>Cundinamarca</option>
-                    <option>Antioquia</option>
+                    {!loadingDepartments ? (
+                      listsData.departmentsList.map((dep) => (
+                        <option key={dep.id} value={dep.name}>
+                          {dep.name}
+                        </option>
+                      ))
+                    ) : (
+                      <option>Cargando lista</option>
+                    )}
                   </select>
+
                   <span
                     className={
                       error.department ? 'text-xs text-red-700' : 'hidden'
@@ -321,7 +372,7 @@ export default function Home() {
                     className="px-2 pb-1 mt-1 min-w-36 w-full rounded-md border border-slate-400"
                     id="city"
                     name="city"
-                    value={parameters.city}
+                    value={fields.city}
                     onChange={(event) => {
                       errorOnChange(event, "city");
                       handleChange(event);
@@ -329,8 +380,17 @@ export default function Home() {
                     }}
                   >
                     <option value="">Seleccione una ciudad</option>
-                    <option>Bogotá D.C.</option>
-                    <option>Medellín</option>
+                    {!loadingCites ? (
+                      listsData.citiesList.map((city, index) => (
+                        <option key={index} value={city}>
+                          {city}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="">Seleccione departamento primero</option>
+                    )}
+                    {/* <option>Bogotá D.C.</option>
+                    <option>Medellín</option> */}
                   </select>
                   <span
                     className={error.city ? 'text-xs text-red-700' : 'hidden'}
@@ -347,7 +407,7 @@ export default function Home() {
                     id="phone"
                     type="text"
                     name="phone"
-                    value={parameters.phone}
+                    value={fields.phone}
                     onChange={(event) => {
                       errorOnChange(event, "phone");
                       handleChange(event);
@@ -369,7 +429,7 @@ export default function Home() {
                     id="email"
                     type="email"
                     name="email"
-                    value={parameters.email}
+                    value={fields.email}
                     onChange={(event) => {
                       errorOnChange(event, "email");
                       handleChange(event);
@@ -389,11 +449,11 @@ export default function Home() {
                     id="habeasData"
                     type="checkbox"
                     name="habeasData"
-                    checked={parameters.habeasData} // Aquí usamos 'checked' en lugar de 'value'
+                    checked={fields.habeasData} // Aquí usamos 'checked' en lugar de 'value'
                     onChange={(event) => {
                       errorOnChange(event, "habeasData");
-                      setParameters({
-                        ...parameters,
+                      setFields({
+                        ...fields,
                         habeasData: event.target.checked,
                       });
                       setFormInteraction(true);
@@ -437,4 +497,4 @@ export default function Home() {
       </div>
     </main>
   );
-}
+};
