@@ -9,13 +9,14 @@ const config: Config = {
   theme: {
     extend: {
       screens: {
-        'sm': '300px',
+        'sm': '320px',
         'md': '520px',
         'lg': '900px',
       },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        customGreen: 'rgb(70, 205, 105)',
       },
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'sans-serif']
