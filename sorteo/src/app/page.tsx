@@ -201,11 +201,13 @@ export default function Home() {
     updateErrors();
     const isValidForm = validateForm(error);
 
-    if (!formInteraction || !isValidForm) {
+    if(results.solved){
+      alert('Solo se puede obtener un código por registro.');
+      return;
+    } else if (!formInteraction || !isValidForm || !fields.habeasData) {
+      
       console.log('ERRORS REGISTERED:', error);
-      alert(
-        'Por favor complete y verifique la totalidad de los campos para poder registrarse.'
-      );
+      alert('Por favor complete y verifique la totalidad de los campos para poder registrarse.');
       return;
     }
 
