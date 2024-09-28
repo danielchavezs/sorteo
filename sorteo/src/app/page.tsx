@@ -237,7 +237,7 @@ export default function Home() {
               <div className="flex justify-between mb-8">
                 <h2 className="text-lg font-extrabold text-slate-900">
                   {' '}
-                  Regístrate para participar{' '}
+                  Regístrate{' '}
                 </h2>
                 <button
                   className="text-gray-400 font-semibold underline text-xs"
@@ -249,7 +249,7 @@ export default function Home() {
                 </button>
               </div>
 
-              <div>
+              <div className='flex flex-col space-y-3'>
                 <div className="flex flex-col text-black">
                   <label className="font-semibold">Nombre</label>
                   <input
@@ -442,42 +442,46 @@ export default function Home() {
                   </span>
                 </div>
 
-                <div className="flex flex-row">
-                  <input
-                    // required
-                    className="px-2 pb-1 mt-1 rounded-md border border-slate-400"
-                    id="habeasData"
-                    type="checkbox"
-                    name="habeasData"
-                    checked={fields.habeasData} // Aquí usamos 'checked' en lugar de 'value'
-                    onChange={(event) => {
-                      errorOnChange(event, "habeasData");
-                      setFields({
-                        ...fields,
-                        habeasData: event.target.checked,
-                      });
-                      setFormInteraction(true);
-                    }}
-                  />
-                  <p className="ml-4 mt-4 w-full text-xs">
-                    Autorizo el tratamiento de mis datos de acuerdo con la
-                    finalidad establecida en la política de protección de datos
-                    personales
-                  </p>
+                <div className="flex flex-col">
+                  <div className='flex flex-row'>
+                    <input
+                      // required
+                      className="px-2 pb-1 mt-1 rounded-md border border-slate-400"
+                      id="habeasData"
+                      type="checkbox"
+                      name="habeasData"
+                      checked={fields.habeasData} // Aquí usamos 'checked' en lugar de 'value'
+                      onChange={(event) => {
+                        errorOnChange(event, "habeasData");
+                        setFields({
+                          ...fields,
+                          habeasData: event.target.checked,
+                        });
+                        setFormInteraction(true);
+                      }}
+                    />
+                    <p className="ml-4 mt-4 w-full text-xs">
+                      Autorizo el tratamiento de mis datos de acuerdo con la
+                      finalidad establecida en la política de protección de datos
+                      personales
+                    </p>
+                  </div>
+
                   <span
                     className={
-                      error.habeasData ? 'text-xs text-red-700' : 'hidden'
+                      error.habeasData ? 'mt-2 text-xs text-red-700' : 'hidden'
                     }
                   >
                     {error.habeasData}
                   </span>
                 </div>
+
               </div>
 
               <div className="">
                 <button
                   type="submit"
-                  className="bg-slate-300 lg:w-60 md:w-64 mt-8 flex font-bold text-sm bg-lime py-2 pl-12 pr-6 sm:place-content-center sm:px-0 rounded-3xl hover:bg-ligthlime sm:w-full"
+                  className="bg-slate-900 text-white lg:w-60 md:w-64 mt-8 flex font-bold text-sm bg-lime py-2 pl-12 pr-6 sm:place-content-center sm:px-0 sm:w-full rounded-3xl transition-all hover:scale-105 hover:bg-customGreen"
                 >
                   {' '}
                   Recibir Código{' '}
@@ -494,6 +498,7 @@ export default function Home() {
             <EmptyResult />
           )}
         </div>
+
       </div>
     </main>
   );

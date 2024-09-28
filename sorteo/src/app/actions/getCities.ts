@@ -20,8 +20,6 @@ export async function getDepartments () {
     };
 };
 
-// export const departments = getDepartments();
-
 export async function getCities( id: number ) {
     try {
         // Con el id extraído previamente de la anterior lista, podemos hacer una nueva llamada a la API con solo el id del Departamento.
