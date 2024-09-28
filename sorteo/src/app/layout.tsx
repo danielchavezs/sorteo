@@ -16,7 +16,11 @@ import { plusJakartaSans } from "./asstes/fonts";
 
 export const metadata: Metadata = {
   title: "Sorteo Promocional",
-  description: "Sorteo apra clientes de marca automotriz.",
+  description: "Sorteo para clientes de marca automotriz que se registren en el formulario.",
+  icons:{
+    icon: "/form-logo.png",
+    // icon: "/gc_logo_ico.ico"
+  }
 };
 
 export default function RootLayout({

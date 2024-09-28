@@ -205,7 +205,7 @@ export default function Home() {
       alert('Solo se puede obtener un código por registro.');
       return;
     } else if (!formInteraction || !isValidForm || !fields.habeasData) {
-      
+
       console.log('ERRORS REGISTERED:', error);
       alert('Por favor complete y verifique la totalidad de los campos para poder registrarse.');
       return;
@@ -242,7 +242,8 @@ export default function Home() {
                   Regístrate{' '}
                 </h2>
                 <button
-                  className="text-gray-400 font-semibold underline text-xs"
+                  // className="text-gray-400 font-semibold underline text-xs"
+                  className='text-slate-500 w-fit h-fit font-semibold underline text-xs rounded-md p-2 transition-all transform hover:scale-105 hover:bg-red-600 hover:text-white hover:no-underline hover:shadow-md'
                   type="button"
                   onClick={resetAll}
                 >
@@ -260,6 +261,7 @@ export default function Home() {
                     id="firstName"
                     type="text"
                     name="firstName"
+                    placeholder='Juan'
                     value={fields.firstName}
                     onChange={(event) => {
                       errorOnChange(event, "firstName");
@@ -283,6 +285,7 @@ export default function Home() {
                     id="lastName"
                     type="text"
                     name="lastName"
+                    placeholder='Pérez'
                     value={fields.lastName}
                     onChange={(event) => {
                       errorOnChange(event, "lastName");
@@ -309,6 +312,7 @@ export default function Home() {
                     id="nationalID"
                     type="text"
                     name="nationalID"
+                    placeholder='1010101010'
                     value={fields.nationalID}
                     onChange={(event) => {
                       errorOnChange(event, "nationalID");
@@ -409,6 +413,7 @@ export default function Home() {
                     id="phone"
                     type="text"
                     name="phone"
+                    placeholder='3010101010'
                     value={fields.phone}
                     onChange={(event) => {
                       errorOnChange(event, "phone");
@@ -431,6 +436,7 @@ export default function Home() {
                     id="email"
                     type="email"
                     name="email"
+                    placeholder='juanperez@ejemplo.com'
                     value={fields.email}
                     onChange={(event) => {
                       errorOnChange(event, "email");
