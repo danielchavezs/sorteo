@@ -242,7 +242,6 @@ export default function Home() {
                   Regístrate{' '}
                 </h2>
                 <button
-                  // className="text-gray-400 font-semibold underline text-xs"
                   className='text-slate-500 w-fit h-fit font-semibold underline text-xs rounded-md p-2 transition-all transform hover:scale-105 hover:bg-red-600 hover:text-white hover:no-underline hover:shadow-md'
                   type="button"
                   onClick={resetAll}

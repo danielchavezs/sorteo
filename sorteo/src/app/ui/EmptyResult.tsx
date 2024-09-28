@@ -12,11 +12,11 @@ export default function EmptyResult(){
           <div className="flex flex-col space-y-4 lg:w-full md:w-3/4">
             <h2 className="text-white text-2xl text-center font-bold">
               {" "}
-              Acá se mostrará su código una vez complete su registro.
+              Acá se mostrará tu código una vez completado el registro.
             </h2>
             <p className="text-gray-400 text-center md:text-sm sm:text-xs mb-6">
-              Complete su formulario y dé click en "Recibir Código" para poder realizar
-              su registro y recibir su código para participar en el sorteo.
+              Completa tu formulario y da click en "Recibir Código" para poder realizar
+              el registro y recibir tu código para participar en el sorteo.
             </p>
           </div>
         </div>

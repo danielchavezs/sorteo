@@ -7,3 +7,5 @@ services:
       dockerfile: Dockerfile
     ports:
       - '3000:3000'
+    volumes:
+      - ./src:/app/src  # Adicionado para configurar actualización de la imagen con los cambios en la app.
