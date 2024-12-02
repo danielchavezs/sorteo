@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { plusJakartaSans } from "./asstes/fonts";
+import { plusJakartaSans } from "./assets/fonts";
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",

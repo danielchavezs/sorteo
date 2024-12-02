@@ -1,4 +1,4 @@
-import { Errors, Fields } from "../types";
+import { Errors, Fields } from "../assets/types";
 
 export const validateString = (value: string, field: keyof Fields) => {
     const regex =

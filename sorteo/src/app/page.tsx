@@ -4,7 +4,7 @@ import EmptyResult from './ui/EmptyResult';
 import { useEffect, useState } from 'react';
 import { getCities, getDepartments } from './actions/getCities';
 import { generateCode } from './actions/generateCode';
-import { Errors, Fields, List, Results } from './types';
+import { Errors, Fields, List, Results } from './assets/types';
 import { validateBoolean, validateEmail, validateForm, validateNumber, validateString } from './actions/validations';
 
 export default function Home() {
@@ -229,9 +229,9 @@ export default function Home() {
   // console.error(error)
   // console.log("DATA FETCHED FRFOM SERVER:", listsData);
   // console.log("DEPARTAMENTO SELECCIONADO:", )
-
+  // bg-sky-100
   return (
-    <main className="bg-sky-100 flex min-h-screen flex-col items-center justify-between lg:p-32 md:p-12">
+    <main className="bg-slate-200 flex min-h-screen flex-col items-center justify-between lg:p-32 md:p-12">
       <div className="bg-white flex lg:flex-row md:flex-col md:rounded-2xl sm:flex-col max-w-fit shadow-2xl lg:rounded-2xl">
         <div className="bg-white w-full lg:w-96 md:w-full sm:w-screen flex p-6 rounded-l-2xl md:rounded-t-2xl">
           <div className="w-full">
@@ -488,7 +488,7 @@ export default function Home() {
               <div className="">
                 <button
                   type="submit"
-                  className="bg-slate-900 text-white lg:w-60 md:w-64 mt-8 flex font-bold text-sm bg-lime py-2 pl-12 pr-6 sm:place-content-center sm:px-0 sm:w-full rounded-3xl transition-all hover:scale-105 hover:bg-customGreen"
+                  className="bg-teal-900 text-white lg:w-60 md:w-64 mt-8 flex font-bold text-sm bg-lime py-2 pl-12 pr-6 sm:place-content-center sm:px-0 sm:w-full rounded-3xl transition-all hover:scale-105 hover:bg-customGreen"
                 >
                   {' '}
                   Recibir Código{' '}

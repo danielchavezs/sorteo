@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Department } from "../types";
+import { Department } from "../assets/types";
 
 export async function getDepartments () {
     
